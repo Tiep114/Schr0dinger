@@ -1,11 +1,11 @@
 # Introduction
 This is a hobby project intended to build intuition on numerical PDE solvers and to visualize their results.
 Furthermore, its goal is to study what is the quality of code produced by LLMs for well-known physical problems,
-how well can AI interpret results, and ultimately, how reliable the computational software can be using these development
+how well can AI interpret results, and ultimately, how reliable is the computational software developed using these
 methods.
 
 The underlying philosophy is to approach software engineering as an empirical science. AI tools combined with domain knowledge
-enable a fast pace of code production for engineering and scientific tasks. Evidently, this approach to development has a major
+enable a fast pace of code development for engineering and scientific tasks. Evidently, this approach to development has a major
 challenge; since the majority of the code is produced by AI, the developer has no atomistic understanding of the code. LLMs
 are known to produce mistakes and hallucinations, and it is so far an open question what is the level of productivity gains
 one can obtain in maintaining and expanding an AI generated codebase, and how does it compare to e.g., a legacy codebase
