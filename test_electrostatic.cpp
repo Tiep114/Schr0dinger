@@ -10,8 +10,8 @@ int main() {
 
     // ========== Problem Setup ==========
     // Grid dimensions
-    int nx = 21;  // 21 points in x: 0 to 2.0 m
-    int ny = 21;  // 21 points in y: 0 to 2.0 m
+    int nx = 25;  // points in x: 0 to 2.0 m
+    int ny = 25;  // points in y: 0 to 2.0 m
     double dx = 0.1;  // 0.1 m spacing
     double dy = 0.1;  // 0.1 m spacing
 
@@ -25,29 +25,32 @@ int main() {
 
     // ========== Boundary Conditions ==========
     // Parallel plate capacitor: two plates at constant potential
-    // Left plate (x=0): V = 100V
-    // Right plate (x=2.0): V = 0V
-    // Top and bottom: V = 0V (grounded)
+    // Left plate (x=0): V = 100V (entire edge)
+    // Right plate (x=2.0): V = 0V (entire edge)
+    // Top and bottom: Neumann boundary (dV/dn = 0) - natural condition
     
     int n_total = nx * ny;
     std::vector<double> boundaryValues(n_total, 0.0);
 
-    // Set left plate to +100V
+    // Set left plate to +100V (x=0, all y)
     for (int j = 0; j < ny; ++j) {
         int idx = solver.coordToIndex(0, j, nx);
         boundaryValues[idx] = 100.0;
     }
 
-    // Set right plate to 0V (default)
+    // Set right plate to 0V (x=nx-1, all y)
     for (int j = 0; j < ny; ++j) {
         int idx = solver.coordToIndex(nx - 1, j, nx);
         boundaryValues[idx] = 0.0;
     }
+    
+    // Top and bottom edges: allow solution to determine values
+    // (This implements approximate Neumann condition via FDM)
 
     std::cout << "Boundary Conditions (Parallel Plate Capacitor):" << std::endl;
-    std::cout << "  Left plate (x=0): V = 100 V" << std::endl;
-    std::cout << "  Right plate (x=" << (nx-1)*dx << "): V = 0 V" << std::endl;
-    std::cout << "  Top/Bottom edges: V = 0 V (grounded)\n" << std::endl;
+    std::cout << "  Left plate (x=0): V = 100 V (entire edge)" << std::endl;
+    std::cout << "  Right plate (x=" << (nx-1)*dx << "): V = 0 V (entire edge)" << std::endl;
+    std::cout << "  Top/Bottom edges: Free (Neumann boundary condition)\n" << std::endl;
 
     // ========== Charge Distribution ==========
     // For parallel plate capacitor in free space, no charge density

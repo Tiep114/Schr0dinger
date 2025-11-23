@@ -41,16 +41,28 @@ void ElectrostaticSolver::buildFDMSystem(
         for (int i = 0; i < nx; ++i) {
             int idx = coordToIndex(i, j, nx);
             
-            // Boundary points (Dirichlet boundary conditions)
-            if (i == 0 || i == nx - 1 || j == 0 || j == ny - 1) {
+            // Left and right plate boundaries (x=0 and x=nx-1)
+            if (i == 0 || i == nx - 1) {
                 A(idx, idx) = 1.0;
                 
-                // Use provided boundary values or default to 0
+                // Use provided boundary values
                 if (idx < static_cast<int>(boundaryValues.size())) {
                     b(idx) = boundaryValues[idx];
                 } else {
                     b(idx) = 0.0;
                 }
+            }
+            // Top and bottom edges with Neumann-like condition (free boundary)
+            else if (j == 0 || j == ny - 1) {
+                // Use one-sided finite difference for top/bottom
+                // Approximate as: dV/dy = 0 at boundaries
+                A(idx, idx) = 1.0;
+                if (j == 0) {
+                    A(idx, coordToIndex(i, j + 1, nx)) = -1.0;
+                } else {
+                    A(idx, coordToIndex(i, j - 1, nx)) = -1.0;
+                }
+                b(idx) = 0.0;
             }
             // Interior points
             else {
