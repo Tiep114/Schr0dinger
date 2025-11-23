@@ -19,10 +19,10 @@ based on physics for an increasing hierarchy of complexity.
 
 # How to use
 
-- **Multi-Compiler Support**
-  - MSVC (Visual Studio)
-  - GCC/MinGW
-  - Clang
+## Multi-Compiler Support
+- MSVC (Visual Studio)
+- GCC/MinGW
+- Clang
 
 ## Requirements
 
@@ -53,3 +53,109 @@ cd Schr0dinger
 ```powershell
 vcpkg install eigen3:x64-windows
 ```
+
+### 3. Install C++ Compiler
+
+Choose **one** of the following:
+
+**Option A: MSVC (Visual Studio)** - Recommended for Windows
+- Download: https://visualstudio.microsoft.com/community/
+- Install Visual Studio Community 2026
+- During installation, select "Desktop development with C++"
+- Add to PATH automatically
+
+**Option B: GCC/MinGW** - Cross-platform alternative
+- Download: https://www.mingw-w64.org/
+- Extract and add to system PATH
+- Verify: `g++ --version`
+
+**Option C: Clang** - LLVM toolchain
+- Download: https://releases.llvm.org/
+- Install and add to system PATH
+- Verify: `clang++ --version`
+
+### 4. Install Python Dependencies (for visualization)
+```powershell
+pip install matplotlib numpy
+```
+
+## Quick Start
+
+The fastest way to get running:
+
+```powershell
+# 1. Build and run matrix solver tests
+python build.py all test_matrix_solver
+
+# 2. Build and run electrostatic solver
+python build.py all test_electrostatic
+
+# 3. Visualize results
+python visualize_electrostatic.py
+```
+
+That's it! The script handles compiler detection automatically.
+
+## Building the Project
+
+### Option 1: Interactive Mode (Easiest)
+```powershell
+python build.py
+```
+- Automatically detects your installed compilers
+- Shows a menu to select target (matrix_solver, electrostatic, or both)
+- Builds and runs your selection
+
+### Option 2: Command-Line Mode (Fastest)
+```powershell
+python build.py all test_matrix_solver      # Test matrix solver
+python build.py all test_electrostatic      # Test electrostatic solver
+python build.py build test_electrostatic    # Build only (no run)
+python build.py run test_electrostatic      # Run existing build
+```
+
+## Running Tests
+
+### Matrix Solver Tests
+Tests 7 examples of linear algebra operations:
+- Examples 1-5: Direct solvers (LU, QR, determinant, inverse, eigenvalues)
+- Examples 6-7: Iterative solvers (Conjugate Gradient, BiCGSTAB)
+
+```powershell
+python build.py all test_matrix_solver
+```
+
+### Electrostatic Solver Tests
+Simulates a parallel plate capacitor with:
+- 25×25 grid spanning 2.5m × 2.5m
+- Left plate at 100V, right plate at 0V
+- Generates CSV files: potential.csv, Ex.csv, Ey.csv, E_magnitude.csv, energy_density.csv
+
+```powershell
+python build.py all test_electrostatic
+```
+
+## Visualization
+
+After running the electrostatic test:
+
+```powershell
+python visualize_electrostatic.py
+```
+
+Generates `electrostatic_solution.png` showing:
+1. Potential contours
+2. Ex field component
+3. Ey field component  
+4. Field magnitude |E|
+5. Energy density
+6. Field vectors overlay
+
+## Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| "Eigen3 not found" | `vcpkg install eigen3:x64-windows` |
+| "No compilers found" | Install MSVC, GCC/MinGW, or Clang |
+| Build fails on Linux | Use MSVC or adjust include paths |
+| Visualization fails | `pip install --upgrade matplotlib numpy` |
