@@ -157,5 +157,4 @@ Generates `electrostatic_solution.png` showing:
 |---------|----------|
 | "Eigen3 not found" | `vcpkg install eigen3:x64-windows` |
 | "No compilers found" | Install MSVC, GCC/MinGW, or Clang |
-| Build fails on Linux | Use MSVC or adjust include paths |
 | Visualization fails | `pip install --upgrade matplotlib numpy` |
